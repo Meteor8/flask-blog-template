@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}
+        {{post['title']}}
+    {% endblock %}</h1>
+    {% if g.user %}
+        <a href="{{url_for('blog.profile',uid=post['author_id'])}}">{{post['username']}}</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <p class="body">{{ post['body'] }}</p>
+    发布于：{{ post['created'].strftime('%Y-%m-%d') }}
+    {# 如果是自己的帖子，添加修改按钮 #}
+    {% if g.user['id'] == post['author_id'] %}
+        <a href="{{ url_for('blog.update', id=post['id']) }}" class="action">编辑</a>
+    {% endif %}
+    <p>
+        <!-- 应该用onclick调用js，可实现post提交并刷新数字 -->
+        <input type="button" value="👍" >
+        <input type="button" value="👎" >
+    </p>
+    <hr>
+    <div class="comm">
+        <form method="post">
+            <textarea name="comm_content" id="comm_content" cols="30" rows="10"></textarea>
+            <input type="submit">
+        </form>
+        {% if comments %}
+            {% for comm in comments %}
+                <p>{{ comm['content'] }}</p>  
+                {% if not loop.last %}
+                    <hr>
+                {% endif %}  
+            {% endfor %}
+        {% else %}
+            <p>暂时没有评论</p>
+        {% endif %}
+        
+    </div>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 {% block header %}
     <h1>{% block title %}
-        帖子
+        首页
     {% endblock %}</h1>
     {% if g.user %}
         <a href="{{ url_for('blog.create') }}" class="action">写一个新帖子</a>
@@ -14,13 +14,9 @@
         <article class="post">
             <header>
                 <div>
-                    <h1>{{ post['title'] }}</h1>
+                    <h1><a href="{{url_for('blog.show',id=post['id'])}}">{{ post['title'] }}</a></h1>
                     <div class="about">作者：{{ post['username'] }} 时间：{{ post['created'].strftime('%Y-%m-%d') }}</div>
                 </div>
-                {# 如果是自己的帖子，添加修改按钮 #}
-                {% if g.user['id'] == post['author_id'] %}
-                    <a href="{{ url_for('blog.update', id=post['id']) }}" class="action">编辑</a>
-                {% endif %}
             </header>
             <p class="body">{{ post['body'] }}</p>
         </article>
